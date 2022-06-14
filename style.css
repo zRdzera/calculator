@@ -5,14 +5,14 @@
 }
 
 main {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
+    margin: 10px auto;
+    width: 430px;
 }
 
 #display {
     width: 100%;
     height: 80px;
+    margin-bottom: 10px;
     border: 2px solid red;
     display: flex;
     align-items: center;
@@ -20,22 +20,9 @@ main {
 }
 
 #buttons {
-    width: 430px;
-    height: 550px;
+    height: 540px;
     display: flex;
     gap: 10px;
-}
-
-#first-two-columns, #last-two-columns {
-    width: 250px;
-    height: 550px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-#last-two-columns {
-    flex-direction: column;
 }
 
 .button {
@@ -49,4 +36,15 @@ main {
 
 #zero-button {
     width: 210px;
+}
+
+#first-two-columns, #last-two-columns {
+    width: 250px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#last-two-columns {
+    flex-direction: column;
 }
