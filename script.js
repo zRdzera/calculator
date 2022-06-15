@@ -38,9 +38,13 @@ const display = document.querySelector('#display');
 const displayOperation = document.querySelector('#operation');
 const displayResult = document.querySelector('#result');
 const buttons = document.querySelectorAll('.button');
-let firstNumber = 0;
+
+let firstNumber = '';
+let secondNumber = '';
 let operator;
-let secondNumber = 0;
+let result;
+let floatingPointFirst = false;
+let floatingPointSecond = false;
 
 buttons.forEach(button => 
 {
@@ -53,36 +57,57 @@ function displayNumbers(e){
     let numbersRegex = new RegExp ("^([0-9])$");
 
     if(operator === undefined){
-        if(numbersRegex.test(buttonClicked)){   
+        if(buttonClicked === '.' && floatingPointFirst === false){
             firstNumber += buttonClicked;
-            display.textContent += buttonClicked;
+            display.textContent = firstNumber;
+            floatingPointFirst = true;
         }
         else {
-            if(buttonClicked !== '=' && firstNumber !== 0){
-                operator = buttonClicked;
-                display.textContent += `   ${buttonClicked}   `;   
+            if(numbersRegex.test(buttonClicked)){
+                firstNumber += buttonClicked;
+                display.textContent += buttonClicked;
             }
-        }
+            else {
+                if(buttonClicked !== '=' && firstNumber !== ''){
+                    operator = buttonClicked;
+                    firstNumber = parseFloat(firstNumber);  
+                    display.textContent = firstNumber;
+                }
+            }
+        }   
     }
     else {
-        if(numbersRegex.test(buttonClicked)){   
+        if(buttonClicked === '.' && floatingPointSecond === false){
             secondNumber += buttonClicked;
-            display.textContent += buttonClicked; 
+            floatingPointSecond = true;
+            display.textContent = secondNumber;
         }
-    }
-
-    if(buttonClicked === '='){
-        firstNumber = parseInt(firstNumber);
-        secondNumber = parseInt(secondNumber);
-
-        console.log(firstNumber);
-        console.log(secondNumber);
-
-        display.textContent = operate(firstNumber, secondNumber, operator);
-
-        // RESET ALL VARIABLES;
-        firstNumber = 0;
-        secondNumber = 0;
-        operator = undefined;
+        else {
+            if(numbersRegex.test(buttonClicked)){
+                secondNumber += buttonClicked;
+                secondNumber = parseFloat(secondNumber);
+                display.textContent = secondNumber;
+            }
+            else {
+                if(buttonClicked === '='){
+                    result = operate(firstNumber, secondNumber, operator)
+                    display.textContent = result;
+                    firstNumber = result;
+        
+                    floatingPointFirst = false;
+                    floatingPointSecond = false;
+                    secondNumber = '';
+                    operator = undefined;
+                }
+                else {
+                    result = operate(firstNumber, secondNumber, operator)
+                    display.textContent = result;
+                    firstNumber = result;
+        
+                    secondNumber = '';
+                    operator = buttonClicked;
+                }
+            }
+        }            
     }
 }
