@@ -18,19 +18,15 @@ function operate(a, b, operator){
     switch (operator) {
         case '+':
             return add(a, b);
-            break;
 
         case '-':
             return subtract(a, b);
-            break;
 
         case '*':
             return multiply(a, b);
-            break;
 
         case '/':
             return divide(a, b);
-            break;
     }
 }
 
@@ -79,8 +75,8 @@ function displayNumbers(e){
     else {
         if(buttonClicked === '.' && floatingPointSecond === false){
             secondNumber += buttonClicked;
-            floatingPointSecond = true;
             display.textContent = secondNumber;
+            floatingPointSecond = true;
         }
         else {
             if(numbersRegex.test(buttonClicked)){
@@ -90,22 +86,36 @@ function displayNumbers(e){
             }
             else {
                 if(buttonClicked === '='){
-                    result = operate(firstNumber, secondNumber, operator)
-                    display.textContent = result;
-                    firstNumber = result;
-        
-                    floatingPointFirst = false;
-                    floatingPointSecond = false;
-                    secondNumber = '';
-                    operator = undefined;
+                    if(operator === '/' && secondNumber === 0){
+                        display.textContent = "This is not possible bruh, LMAO";
+                        secondNumber = '';
+                        operator = undefined;
+                    }
+                    else {
+                        result = operate(firstNumber, secondNumber, operator)
+                        display.textContent = result;
+                        firstNumber = result;
+            
+                        floatingPointFirst = false;
+                        floatingPointSecond = false;
+                        secondNumber = '';
+                        operator = undefined;
+                    }
                 }
                 else {
-                    result = operate(firstNumber, secondNumber, operator)
-                    display.textContent = result;
-                    firstNumber = result;
-        
-                    secondNumber = '';
-                    operator = buttonClicked;
+                    if(operator === '/' && secondNumber === 0){
+                        display.textContent = "This is not possible bruh, LMAO";
+                        secondNumber = '';
+                        operator = buttonClicked;
+                    }
+                    else {
+                        result = operate(firstNumber, secondNumber, operator)
+                        display.textContent = result;
+                        firstNumber = result;
+            
+                        secondNumber = '';
+                        operator = buttonClicked;
+                    }
                 }
             }
         }            
