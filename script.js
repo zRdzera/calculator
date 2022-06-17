@@ -60,9 +60,11 @@ function displayNumbers(e){
 
     if(operator === undefined){
         if(buttonClicked === '.' && floatingPointFirst === false){
-            firstNumber += buttonClicked;
-            display.textContent = firstNumber;
-            floatingPointFirst = true;
+            if(firstNumber !== ''){
+                firstNumber += buttonClicked;
+                display.textContent = firstNumber;
+                floatingPointFirst = true;
+            }
         }
         else {
             if(numbersRegex.test(buttonClicked)){
@@ -71,57 +73,71 @@ function displayNumbers(e){
             }
             else {
                 if(buttonClicked !== '=' && firstNumber !== ''){
-                    operator = buttonClicked;
-                    firstNumber = parseFloat(firstNumber);  
-                    display.textContent = firstNumber;
+                    if(buttonClicked !== '.'){
+                        operator = buttonClicked;
+                        firstNumber = parseFloat(firstNumber);  
+                        display.textContent = firstNumber;
+                    }
                 }
             }
         }   
     }
     else {
         if(buttonClicked === '.' && floatingPointSecond === false){
-            secondNumber += buttonClicked;
-            display.textContent = secondNumber;
-            floatingPointSecond = true;
+            if(secondNumber !== ''){
+                secondNumber += buttonClicked;
+                display.textContent = secondNumber;
+                floatingPointSecond = true;
+            }
         }
         else {
             if(numbersRegex.test(buttonClicked)){
                 secondNumber += buttonClicked;
-                secondNumber = parseFloat(secondNumber);
                 display.textContent = secondNumber;
             }
             else {
-                if(buttonClicked === '='){
+                if(buttonClicked === '=' && secondNumber !== ''){
                     if(operator === '/' && secondNumber === 0){
                         showErrorMessage();
                     }
                     else {
-                        result = operate(firstNumber, secondNumber, operator)
-                        display.textContent = result;
-                        firstNumber = result;
-            
-                        floatingPointFirst = false;
-                        floatingPointSecond = false;
-                        secondNumber = '';
-                        operator = undefined;
+                        if(buttonClicked !== '.'){
+                            secondNumber = parseFloat(secondNumber);
+                            result = operate(firstNumber, secondNumber, operator)
+                            display.textContent = result;
+                            firstNumber = result;
+                
+                            floatingPointFirst = false;
+                            floatingPointSecond = false;
+                            secondNumber = '';
+                            operator = undefined;
+                        }
                     }
                 }
                 else {
-                    if(operator === '/' && secondNumber === 0){
-                        showErrorMessage();
-                    }
-                    else {
-                        result = operate(firstNumber, secondNumber, operator)
-                        display.textContent = result;
-                        firstNumber = result;
-            
-                        secondNumber = '';
-                        operator = buttonClicked;
+                    if(secondNumber !== ''){
+                        if(operator === '/' && secondNumber === 0){
+                            showErrorMessage();
+                        }
+                        else {
+                            if(buttonClicked !== '.'){
+                                secondNumber = parseFloat(secondNumber);
+                                result = operate(firstNumber, secondNumber, operator)
+                                display.textContent = result;
+                                firstNumber = result;
+                    
+                                secondNumber = '';
+                                operator = buttonClicked;
+                            }
+                        }
                     }
                 }
             }
         }            
     }
+    console.log(firstNumber);
+    console.log(operator);
+    console.log(secondNumber);
 }
 
 function showErrorMessage(){
