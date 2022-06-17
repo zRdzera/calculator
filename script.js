@@ -15,18 +15,24 @@ function divide(firstNumber, secondNumber){
 }
 
 function operate(a, b, operator){
+    let result;
+
     switch (operator) {
         case '+':
-            return add(a, b);
+            result = add(a, b);
+            return Number.isInteger(result) ? result : result.toFixed(4);
 
         case '-':
-            return subtract(a, b);
+            result = subtract(a, b);
+            return Number.isInteger(result) ? result : result.toFixed(4);
 
         case '*':
-            return multiply(a, b);
+            result = multiply(a, b);
+            return Number.isInteger(result) ? result : result.toFixed(4);
 
         case '/':
-            return divide(a, b);
+            result = divide(a, b);
+            return Number.isInteger(result) ? result : result.toFixed(4);
     }
 }
 
@@ -87,9 +93,7 @@ function displayNumbers(e){
             else {
                 if(buttonClicked === '='){
                     if(operator === '/' && secondNumber === 0){
-                        display.textContent = "This is not possible bruh, LMAO";
-                        secondNumber = '';
-                        operator = undefined;
+                        showErrorMessage();
                     }
                     else {
                         result = operate(firstNumber, secondNumber, operator)
@@ -104,9 +108,7 @@ function displayNumbers(e){
                 }
                 else {
                     if(operator === '/' && secondNumber === 0){
-                        display.textContent = "This is not possible bruh, LMAO";
-                        secondNumber = '';
-                        operator = buttonClicked;
+                        showErrorMessage();
                     }
                     else {
                         result = operate(firstNumber, secondNumber, operator)
@@ -120,4 +122,26 @@ function displayNumbers(e){
             }
         }            
     }
+}
+
+function showErrorMessage(){
+    // DISABLE ALL BUTTONS IF THE USER TRIES TO DIVIDE BY 0
+    buttons.forEach(element => {
+        element.disabled = true;
+    });
+
+    display.textContent = "ARE YOU KIDDING ME? ";
+    
+    // THEN AFTER 1 SECOND, ALL BUTTONS ARE ENABLED AGAIN
+    setTimeout(() => 
+    {
+        display.textContent = '';
+        buttons.forEach(element => {
+            element.disabled = false;
+        });
+    }, 1000);
+
+    firstNumber = '';
+    operator = undefined
+    secondNumber = '';
 }
