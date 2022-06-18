@@ -40,6 +40,8 @@ const display = document.querySelector('#display');
 const displayOperation = document.querySelector('#operation');
 const displayResult = document.querySelector('#result');
 const buttons = document.querySelectorAll('.button');
+const clearButton = document.querySelector('button[value="clear"]');
+const deleteButton = document.querySelector('button[value="delete"]');
 
 let firstNumber = '';
 let secondNumber = '';
@@ -47,6 +49,10 @@ let operator;
 let result;
 let floatingPointFirst = false;
 let floatingPointSecond = false;
+let lastButtonClicked;
+
+clearButton.addEventListener('click', clearDisplay);
+deleteButton.addEventListener('click', deleteLastClicked);
 
 buttons.forEach(button => 
 {
@@ -97,26 +103,23 @@ function displayNumbers(e){
             }
             else {
                 if(buttonClicked === '=' && secondNumber !== ''){
-                    if(operator === '/' && secondNumber === 0){
+                    if(operator === '/' && secondNumber == 0){
                         showErrorMessage();
                     }
                     else {
-                        if(buttonClicked !== '.'){
-                            secondNumber = parseFloat(secondNumber);
-                            result = operate(firstNumber, secondNumber, operator)
-                            display.textContent = result;
-                            firstNumber = result;
-                
-                            floatingPointFirst = false;
-                            floatingPointSecond = false;
-                            secondNumber = '';
-                            operator = undefined;
-                        }
+                        secondNumber = parseFloat(secondNumber);
+                        result = operate(firstNumber, secondNumber, operator)
+                        display.textContent = result;
+                        firstNumber = result;
+            
+                        floatingPointSecond = false;
+                        secondNumber = '';
+                        operator = undefined;
                     }
                 }
                 else {
                     if(secondNumber !== ''){
-                        if(operator === '/' && secondNumber === 0){
+                        if(operator === '/' && secondNumber == 0){
                             showErrorMessage();
                         }
                         else {
@@ -126,6 +129,7 @@ function displayNumbers(e){
                                 display.textContent = result;
                                 firstNumber = result;
                     
+                                floatingPointSecond = false;
                                 secondNumber = '';
                                 operator = buttonClicked;
                             }
@@ -135,9 +139,36 @@ function displayNumbers(e){
             }
         }            
     }
-    console.log(firstNumber);
-    console.log(operator);
-    console.log(secondNumber);
+
+    lastButtonClicked = buttonClicked;
+}
+
+function clearDisplay(){
+    display.textContent = '';
+    firstNumber = '';
+    secondNumber = '';
+    operator = undefined;
+}
+
+function deleteLastClicked(){
+    let stringToChange = display.textContent;
+
+    if(operator === undefined){
+        stringToChange = stringToChange.slice(0, -1);
+        firstNumber = stringToChange;
+        display.textContent = stringToChange;
+    }
+    else {
+        if(secondNumber === ''){
+            display.textContent = firstNumber;
+            operator = undefined;
+        }
+        else {
+            stringToChange = stringToChange.slice(0, -1);
+            secondNumber = stringToChange;
+            display.textContent = stringToChange;
+        }
+    }
 }
 
 function showErrorMessage(){
