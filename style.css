@@ -15,8 +15,23 @@ main {
     margin-bottom: 10px;
     border: 2px solid red;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+#operation {
+    width: 100%;
+    height: 35px;
+    border: 1px solid red;
+    text-align: end;
+}
+
+#result {
+    width: 100%;
+    height: 35px;
+    border: 1px solid blue;
+    text-align: end;
 }
 
 #buttons {
