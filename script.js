@@ -41,7 +41,7 @@ const displayOperation = document.querySelector('#operation');
 const displayResult = document.querySelector('#result');
 const buttons = document.querySelectorAll('.button');
 const clearButton = document.querySelector('button[value="clear"]');
-const deleteButton = document.querySelector('button[value="delete"]');
+const deleteButton = document.querySelector('button[value="Backspace"]');
 
 let firstNumber = '';
 let secondNumber = '';
@@ -49,20 +49,48 @@ let operator;
 let result;
 let floatingPointFirst = false;
 let floatingPointSecond = false;
-let lastButtonClicked;
 
 clearButton.addEventListener('click', clearDisplay);
 deleteButton.addEventListener('click', deleteLastClicked);
-
+window.addEventListener('keyup', whichFunctionExecute);
 buttons.forEach(button => 
 {
-    if(button.textContent !== 'Clear' && button.textContent !== 'Delete')
+    if(button.textContent !== 'Clear' && button.textContent !== 'Delete'){
         button.addEventListener('click', displayNumbers);
+    }     
 })
 
+function whichFunctionExecute(e){
+    switch (e.key) {
+        case 'Backspace':
+            deleteLastClicked();
+            break;
+
+        case 'Delete':
+            clearDisplay();
+            break;
+    
+        default:
+            displayNumbers(e);
+            break;
+    }
+}
+
 function displayNumbers(e){
-    let buttonClicked = e.target.textContent;
+    let buttonClicked;
     let numbersRegex = new RegExp ("^([0-9])$");
+    let symbolsRegex = new RegExp ("^([*+-/])$")
+
+    if(e.type === 'keyup'){
+        buttonClicked = e.key;
+    }
+    else {
+        buttonClicked = e.target.value;
+    }
+
+    if(buttonClicked === 'Backspace' || buttonClicked === 'Delete') return;
+
+    if(buttonClicked === ',') buttonClicked = '.';
 
     if(operator === undefined){
         if(buttonClicked === '.' && floatingPointFirst === false){
@@ -78,8 +106,8 @@ function displayNumbers(e){
                 display.textContent += buttonClicked;
             }
             else {
-                if(buttonClicked !== '=' && firstNumber !== ''){
-                    if(buttonClicked !== '.'){
+                if(buttonClicked !== 'Enter' && firstNumber !== ''){
+                    if(buttonClicked !== '.' && symbolsRegex.test(buttonClicked)){
                         operator = buttonClicked;
                         firstNumber = parseFloat(firstNumber);  
                         display.textContent = firstNumber;
@@ -102,7 +130,7 @@ function displayNumbers(e){
                 display.textContent = secondNumber;
             }
             else {
-                if(buttonClicked === '=' && secondNumber !== ''){
+                if(buttonClicked === 'Enter' && secondNumber !== ''){
                     if(operator === '/' && secondNumber == 0){
                         showErrorMessage();
                     }
@@ -112,6 +140,7 @@ function displayNumbers(e){
                         display.textContent = result;
                         firstNumber = result;
             
+                        floatingPointFirst = false;
                         floatingPointSecond = false;
                         secondNumber = '';
                         operator = undefined;
@@ -129,6 +158,7 @@ function displayNumbers(e){
                                 display.textContent = result;
                                 firstNumber = result;
                     
+                                floatingPointFirst = false;
                                 floatingPointSecond = false;
                                 secondNumber = '';
                                 operator = buttonClicked;
@@ -139,8 +169,9 @@ function displayNumbers(e){
             }
         }            
     }
-
-    lastButtonClicked = buttonClicked;
+    // console.log(firstNumber);
+    // console.log(operator);
+    // console.log(secondNumber);
 }
 
 function clearDisplay(){
