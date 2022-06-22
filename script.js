@@ -88,9 +88,11 @@ function displayNumbers(e){
         buttonClicked = e.target.value;
     }
 
-    if(buttonClicked === 'Backspace' || buttonClicked === 'Delete') return;
+    if(buttonClicked === 'Backspace' || buttonClicked === 'Delete') 
+        return;
 
-    if(buttonClicked === ',') buttonClicked = '.';
+    if(buttonClicked === ',') 
+        buttonClicked = '.';
 
     // IF STATMENT ONLY FOR GET THE FIRST NUMBER
     if(operator === undefined){
@@ -155,7 +157,7 @@ function displayNumbers(e){
                             showErrorMessage();
                         }
                         else {
-                            if(buttonClicked !== '.'){
+                            if(buttonClicked !== '.' && symbolsRegex.test(buttonClicked)){
                                 secondNumber = parseFloat(secondNumber);
                                 result = operate(firstNumber, secondNumber, operator)
                                 displayResult.textContent = result;
