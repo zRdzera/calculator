@@ -20,19 +20,43 @@ function operate(a, b, operator){
     switch (operator) {
         case '+':
             result = add(a, b);
-            return Number.isInteger(result) ? result : result.toFixed(4);
+            if(Number.isInteger(result)){
+                return result;
+            }
+            else {
+                result = checkSizeFloatingNumber(result);
+                return result;
+            }
 
         case '-':
             result = subtract(a, b);
-            return Number.isInteger(result) ? result : result.toFixed(4);
+            if(Number.isInteger(result)){
+                return result;
+            }
+            else {
+                result = checkSizeFloatingNumber(result);
+                return result;
+            }
 
         case '*':
             result = multiply(a, b);
-            return Number.isInteger(result) ? result : result.toFixed(4);
+            if(Number.isInteger(result)){
+                return result;
+            }
+            else {
+                result = checkSizeFloatingNumber(result);
+                return result;
+            }
 
         case '/':
             result = divide(a, b);
-            return Number.isInteger(result) ? result : result.toFixed(4);
+            if(Number.isInteger(result)){
+                return result;
+            }
+            else {
+                result = checkSizeFloatingNumber(result);
+                return result;
+            }
     }
 }
 
@@ -40,7 +64,7 @@ const display = document.querySelector('#display');
 const displayOperation = document.querySelector('#operation');
 const displayResult = document.querySelector('#result');
 const buttons = document.querySelectorAll('.button');
-const clearButton = document.querySelector('button[value="clear"]');
+const clearButton = document.querySelector('button[value="Delete"]');
 const deleteButton = document.querySelector('button[value="Backspace"]');
 
 let firstNumber = '';
@@ -53,6 +77,42 @@ let floatingPointSecond = false;
 clearButton.addEventListener('click', clearDisplay);
 deleteButton.addEventListener('click', deleteLastClicked);
 window.addEventListener('keyup', whichFunctionExecute);
+window.onkeyup = event => {
+    let buttonTyped = document.querySelector(`.button[value="${event.key}"]`);
+    if(buttonTyped !== null){
+        switch (event.key) {
+            case '*':
+                buttonTyped.classList.add('buttonOperator');
+                setTimeout(() => buttonTyped.classList.remove('buttonOperator'), 250);
+                break;
+
+            case '/':
+                buttonTyped.classList.add('buttonOperator');
+                setTimeout(() => buttonTyped.classList.remove('buttonOperator'), 250);
+                break;
+
+            case '+':
+                buttonTyped.classList.add('buttonOperator');
+                setTimeout(() => buttonTyped.classList.remove('buttonOperator'), 250);
+                break;
+
+            case '-':
+                buttonTyped.classList.add('buttonOperator');
+                setTimeout(() => buttonTyped.classList.remove('buttonOperator'), 250);
+                break;
+
+            case 'Enter':
+                buttonTyped.classList.add('buttonNotOperator');
+                setTimeout(() => buttonTyped.classList.remove('buttonNotOperator'), 250);
+                break;
+        
+            default:
+                buttonTyped.classList.add('buttonActive');
+                setTimeout(() => buttonTyped.classList.remove('buttonActive'), 250);
+                break;
+        }
+    }
+}
 buttons.forEach(button => 
 {
     if(button.textContent !== 'Clear' && button.textContent !== 'Delete'){
@@ -177,9 +237,30 @@ function displayNumbers(e){
             }
         }
     }
-    // console.log(firstNumber);
-    // console.log(operator);
-    // console.log(secondNumber);
+}
+
+function checkSizeFloatingNumber(result){
+    result = result.toString();
+
+    let count = 0;
+
+    for (let i = result.length-1; i >= 0; i--) {
+        if(result[i] === '.'){
+            break;
+        }
+        else if(result[i] !== '0'){
+            count++;
+        }
+    }
+
+    if(count > 4){
+        result = parseFloat(result);
+        return result.toFixed(4);
+    }
+    else {
+        result = parseFloat(result);
+        return result.toFixed(count);
+    }
 }
 
 function clearDisplay(){
@@ -187,11 +268,18 @@ function clearDisplay(){
     displayResult.textContent = '';
     firstNumber = '';
     secondNumber = '';
+    floatingPointFirst = false;
+    floatingPointSecond = false;
     operator = undefined;
 }
 
+// FUNCTION TO REMOVE THE LAST CHARACTER TYPED
 function deleteLastClicked(){
     let stringToChange = displayResult.textContent;
+
+    // if(stringToChange.isEmpty()){
+    //     stringToChange = displayOperation.textContent;
+    // }
 
     if(operator === undefined){
         stringToChange = stringToChange.slice(0, -1);
@@ -215,6 +303,7 @@ function showErrorMessage(){
     // DISABLE ALL BUTTONS IF THE USER TRIES TO DIVIDE BY 0
     buttons.forEach(element => {
         element.disabled = true;
+        element.classList.add('buttonDisabled');
     });
 
     displayResult.textContent = "ARE YOU KIDDING ME? ";
@@ -226,6 +315,7 @@ function showErrorMessage(){
         displayOperation.textContent = '';
         buttons.forEach(element => {
             element.disabled = false;
+            element.classList.remove('buttonDisabled');
         });
     }, 1000);
 
