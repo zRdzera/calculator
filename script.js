@@ -24,7 +24,7 @@ function operate(a, b, operator){
                 return result;
             }
             else {
-                result = checkSizeFloatingNumber(result);
+                result = checkLengthFloatingNumber(result);
                 return result;
             }
 
@@ -34,7 +34,7 @@ function operate(a, b, operator){
                 return result;
             }
             else {
-                result = checkSizeFloatingNumber(result);
+                result = checkLengthFloatingNumber(result);
                 return result;
             }
 
@@ -44,7 +44,7 @@ function operate(a, b, operator){
                 return result;
             }
             else {
-                result = checkSizeFloatingNumber(result);
+                result = checkLengthFloatingNumber(result);
                 return result;
             }
 
@@ -54,7 +54,7 @@ function operate(a, b, operator){
                 return result;
             }
             else {
-                result = checkSizeFloatingNumber(result);
+                result = checkLengthFloatingNumber(result);
                 return result;
             }
     }
@@ -231,15 +231,13 @@ function displayNumbers(e){
                         }
                     }
                 }
-                if(operator !== undefined){
-                    displayOperation.textContent = `${result} ${operator} `;
-                }
             }
         }
     }
 }
 
-function checkSizeFloatingNumber(result){
+// FUNCTION TO CHECK THE FLOATING NUMBER LENGTH AFTER THE .
+function checkLengthFloatingNumber(result){
     result = result.toString();
 
     let count = 0;
@@ -263,6 +261,7 @@ function checkSizeFloatingNumber(result){
     }
 }
 
+// FUNCTION TO CLEAR THE DISPLAY AND ALL VARIABLES
 function clearDisplay(){
     displayOperation.textContent = '';
     displayResult.textContent = '';
@@ -277,9 +276,9 @@ function clearDisplay(){
 function deleteLastClicked(){
     let stringToChange = displayResult.textContent;
 
-    // if(stringToChange.isEmpty()){
-    //     stringToChange = displayOperation.textContent;
-    // }
+    if(stringToChange == result){
+        displayOperation.textContent = '';
+    }
 
     if(operator === undefined){
         stringToChange = stringToChange.slice(0, -1);
@@ -287,18 +286,21 @@ function deleteLastClicked(){
         displayResult.textContent = stringToChange;
     }
     else {
-        if(secondNumber === ''){
-            displayResult.textContent = firstNumber;
-            operator = undefined;
-        }
-        else {
-            stringToChange = stringToChange.slice(0, -1);
-            secondNumber = stringToChange;
-            displayResult.textContent = stringToChange;
+        if(operator !== undefined){
+            if(secondNumber === ''){
+                displayResult.textContent = '';
+                displayOperation.textContent = `${firstNumber} ${operator} `;
+            }
+            else {
+                stringToChange = stringToChange.slice(0, -1);
+                secondNumber = stringToChange;
+                displayResult.textContent = stringToChange;
+            }
         }
     }
 }
 
+// FUNCTION TO DISABLE ALL BUTTONS FOR A PERIOD OF TIME IF USER ATTEMPTS TO DIVIDE BY 0
 function showErrorMessage(){
     // DISABLE ALL BUTTONS IF THE USER TRIES TO DIVIDE BY 0
     buttons.forEach(element => {
